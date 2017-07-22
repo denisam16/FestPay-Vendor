@@ -20,7 +20,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.ProductsActivity"></activity>
+        <activity android:name=".activity.ProductsActivity"
+            android:screenOrientation="sensorLandscape"/>
     </application>
 
 
