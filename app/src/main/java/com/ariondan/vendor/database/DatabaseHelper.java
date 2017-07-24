@@ -76,4 +76,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return ++id;
     }
+
+    public Cursor getHistoryForSearch(String searchField) {
+        String[] results = {DatabaseContract.HistoryContractEntry.COLUMN_ID,
+                DatabaseContract.HistoryContractEntry.COLUMN_PICTURE,
+                DatabaseContract.HistoryContractEntry.COLUMN_PRODUCT,
+                DatabaseContract.HistoryContractEntry.COLUMN_PRICE,
+                DatabaseContract.HistoryContractEntry.COLUMN_QUANTITY,
+                DatabaseContract.HistoryContractEntry.COLUMN_CUSTOMER,
+                DatabaseContract.HistoryContractEntry.COLUMN_TIME};
+        String selection = DatabaseContract.HistoryContractEntry.COLUMN_PRODUCT + " LIKE ? OR " +
+                DatabaseContract.HistoryContractEntry.COLUMN_CUSTOMER + " LIKE ?";
+        String[] selectionArgs = {"%" + searchField + "%", "%" + searchField + "%"};
+        return getReadableDatabase().query(DatabaseContract.HistoryContractEntry.TABLE_NAME, results, selection, selectionArgs, null, null, null);
+    }
 }

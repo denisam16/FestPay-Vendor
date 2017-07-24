@@ -44,6 +44,7 @@
             android:layout_margin="4dp"
             android:hint="@string/login_password"
             android:imeOptions="actionDone"
+            android:inputType="textPassword"
             app:met_floatingLabel="highlight"
             app:met_textColorHint="@color/colorPrimary" />
 

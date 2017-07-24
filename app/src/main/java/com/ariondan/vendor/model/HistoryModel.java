@@ -3,15 +3,21 @@ package com.ariondan.vendor.model;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.ariondan.vendor.database.DatabaseContract;
 import com.ariondan.vendor.database.DatabaseHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.ariondan.vendor.database.DatabaseContract.CURSOR_CUSTOMER;
 import static com.ariondan.vendor.database.DatabaseContract.CURSOR_ID;
 import static com.ariondan.vendor.database.DatabaseContract.CURSOR_PICTURE;
+import static com.ariondan.vendor.database.DatabaseContract.CURSOR_PRICE;
+import static com.ariondan.vendor.database.DatabaseContract.CURSOR_PRODUCT;
+import static com.ariondan.vendor.database.DatabaseContract.CURSOR_QUANTITY;
+import static com.ariondan.vendor.database.DatabaseContract.CURSOR_TIME;
 
 /**
  * Created by Akitektuo on 22.07.2017.
@@ -30,8 +36,15 @@ public class HistoryModel {
     private Date time;
 
     private DatabaseHelper database;
+    private Context context;
+
+    public HistoryModel(Context context) {
+        setContext(context);
+        database = new DatabaseHelper(context);
+    }
 
     public HistoryModel(Context context, String picture, String product, double price, int quantity, String customer, Date time) {
+        setContext(context);
         database = new DatabaseHelper(context);
         database.addHistory(picture, product, price, quantity, customer, time);
     }
@@ -46,16 +59,57 @@ public class HistoryModel {
         setTime(time);
     }
 
+    public HistoryModel(Context context, int id, String picture, String product, double price, int quantity, String customer, Date time) {
+        setContext(context);
+        setId(id);
+        setPicture(picture);
+        setProduct(product);
+        setPrice(price);
+        setQuantity(quantity);
+        setCustomer(customer);
+        setTime(time);
+    }
+
     public List<HistoryModel> getEntireHistory() {
         List<HistoryModel> historyModelList = new ArrayList<>();
         Cursor cursor = database.getHistory();
         if (cursor.moveToFirst()) {
             do {
-//                historyModelList.add(new HistoryModel(cursor.getInt(CURSOR_ID), cursor.getString(CURSOR_PICTURE), cursor.getString()));
+                try {
+                    historyModelList.add(getModelForCursor(cursor));
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
         return historyModelList;
+    }
+
+    public List<HistoryModel> getHistoryForSearch(String searchField) {
+        List<HistoryModel> historyModels = new ArrayList<>();
+        Cursor cursor = database.getHistoryForSearch(searchField);
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    historyModels.add(getModelForCursor(cursor));
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return historyModels;
+    }
+
+    private HistoryModel getModelForCursor(Cursor cursor) throws ParseException {
+        return new HistoryModel(cursor.getInt(CURSOR_ID),
+                cursor.getString(CURSOR_PICTURE),
+                cursor.getString(CURSOR_PRODUCT),
+                Double.parseDouble(cursor.getString(CURSOR_PRICE)),
+                cursor.getInt(CURSOR_QUANTITY),
+                cursor.getString(CURSOR_CUSTOMER),
+                new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss").parse(cursor.getString(CURSOR_TIME)));
     }
 
     public Date getTime() {
@@ -64,6 +118,11 @@ public class HistoryModel {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getTimeAsString() {
+        String rawDate = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss").format(getTime());
+        return rawDate.replaceAll("/", ".").replaceAll("-", "\n");
     }
 
     public String getCustomer() {
@@ -112,5 +171,13 @@ public class HistoryModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

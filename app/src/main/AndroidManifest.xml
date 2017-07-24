@@ -4,7 +4,6 @@
 
     <application
         android:allowBackup="true"
-
         android:icon="@drawable/icon1"
         android:label="@string/app_name"
         android:roundIcon="@drawable/icon1"
@@ -18,11 +17,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".activity.ProductsActivity"
+        <activity
+            android:name=".activity.ProductsActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activity.HistoryActivity"
             android:screenOrientation="sensorLandscape"/>
     </application>
-
 
 </manifest>
