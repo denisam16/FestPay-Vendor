@@ -41,9 +41,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         //TODO: get image by name from internal storage
 //        holder.imageProduct.setImageBitmap();
-        holder.imageProduct.setImageDrawable(context.getResources().getDrawable(R.drawable.coca_cola));
 
         //delete this part when introducing local db
+        holder.imageProduct.setImageDrawable(context.getResources().getDrawable(R.drawable.coca_cola));
         if (item.getProduct().equals("Mici")) {
             holder.imageProduct.setImageDrawable(context.getResources().getDrawable(R.drawable.mici));
         }
