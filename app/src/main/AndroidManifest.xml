@@ -26,4 +26,9 @@
             android:screenOrientation="sensorLandscape"/>
     </application>
 
+    <uses-permission android:name="android.permission.NFC"/>
+
+    <uses-feature android:name="android.hardware.nfc"
+        android:required="false"/>
+
 </manifest>
