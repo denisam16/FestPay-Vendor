@@ -61,4 +61,24 @@
         android:padding="16dp"
         android:scrollbars="none" />
 
+
+    <ToggleButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tglReadWrite"
+        android:textOn="Read"
+        android:textOff="Write"
+        android:onClick="tglReadWriteOnClick"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txtTagContent"/>
+
+
+
+
+
+
+
 </LinearLayout>
